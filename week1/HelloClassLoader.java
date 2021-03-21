@@ -1,17 +1,25 @@
 import java.util.Base64;
 import java.io.File;
 import java.nio.file.Files;
+import java.lang.reflect.Method;  
+import java.lang.reflect.InvocationTargetException;    
 
 public class HelloClassLoader extends ClassLoader {
 	public static void main(String[] args){
-		//new jvm.Hello();
+		//new Hello().hello();
 		try {
-			new HelloClassLoader().findClass("Hello").newInstance();
+			Class<?> c = new HelloClassLoader().findClass("Hello");
+			Method m = c.getDeclaredMethod("hello");
+			m.invoke(c.newInstance());
 		} catch (ClassNotFoundException e){
 			e.printStackTrace();
 		} catch (IllegalAccessException e){
 			e.printStackTrace();
 		} catch(InstantiationException e){
+			e.printStackTrace();
+		} catch (NoSuchMethodException e){
+			e.printStackTrace();
+		} catch (InvocationTargetException e){
 			e.printStackTrace();
 		}
 	}
@@ -27,13 +35,9 @@ public class HelloClassLoader extends ClassLoader {
 				
 				fileContent[i] = int2byte(result);
 			}
-			//System.out.println(fileContent);
-			
-			//byte[] bytes = decode(helloBase64);
 			
 			return defineClass(name, fileContent, 0, fileContent.length);
 		} catch (Exception e){
-			System.out.println(file.toPath());
 			e.printStackTrace();
 		}
 		return null;
@@ -46,9 +50,5 @@ public class HelloClassLoader extends ClassLoader {
     public static byte int2byte(int i) {
         return (byte) (i & 0x000000ff);
     }
-	
-	public byte[] decode(String base64){
-		return Base64.getDecoder().decode(base64);
-	}
 	
 }
