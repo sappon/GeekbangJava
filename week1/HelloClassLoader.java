@@ -27,7 +27,7 @@ public class HelloClassLoader extends ClassLoader {
 				
 				fileContent[i] = int2byte(result);
 			}
-			System.out.println(fileContent);
+			//System.out.println(fileContent);
 			
 			//byte[] bytes = decode(helloBase64);
 			
